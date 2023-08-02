@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,19 +12,16 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="../../resources/css/style.css" rel="stylesheet">
+    <link href="resources/css/style.css" rel="stylesheet">
 </head>
 <body>
-<?php
-session_start();
-?>
 <header class="mt-3 mb-5">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid pl-0">
                 <div class="navbar-brand fs-4 mr-3">To do list</div>
                 <?php if (isset($_SESSION['login'])): ?>
-                    <a type="button" class="btn btn-secondary" href="../../controller/auth/logout.php">
+                    <a type="button" class="btn btn-secondary" href="<?= addDomainToUrl('/controller/auth/logout.php') ?>">
                         Выйти
                     </a>
                 <?php else: ?>
@@ -43,7 +43,7 @@ session_start();
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" name="loginform" action="../../controller/auth/auth.php">
+                        <form method="POST" name="loginform" action="<?= addDomainToUrl('/controller/auth/auth.php') ?>">
                             <div class="row mb-3">
                                 <label for="login" class="col-md-4 col-form-label text-md-end">Имя пользователя</label>
 
@@ -76,3 +76,13 @@ session_start();
         </div>
     </section>
 </header>
+
+<?php
+
+function addDomainToUrl($url)
+{
+    $domain = $_SERVER['HTTP_HOST'];
+    $newUrl = "http://$domain$url";
+    return $newUrl;
+}
+?>

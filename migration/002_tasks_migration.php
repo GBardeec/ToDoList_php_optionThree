@@ -1,5 +1,5 @@
 <?php
-$connection = require_once '000_database.php';
+require_once '000_database.php';
 
 $sql = "CREATE TABLE tasks (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

@@ -1,13 +1,12 @@
 <?php
-require_once("database_tasks.php");
+session_start();
+require_once($_SERVER['DOCUMENT_ROOT'] . "/migration/000_database.php");
 
-$sql = "DELETE FROM tasks WHERE status IS NULL";
-
-if ($connection->query($sql) === TRUE) {
-    header("Location: ../../resources/views/index.php");
-} else {
-    echo "Ошибка при удалении данных: " . $connection->error;
+try {
+    $sql = "DELETE FROM tasks WHERE status IS NULL AND user_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$_SESSION['id']]);
+    header("Location: ../../index.php");
+} catch (PDOException $e) {
+    echo "Ошибка при удалении данных: " . $e->getMessage();
 }
-
-$connection->close();
-?>

@@ -1,18 +1,17 @@
 <?php
-require_once("database_tasks.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/migration/000_database.php");
 
 if(isset($_POST['deleteOne']) && isset($_POST['taskId'])) {
     $taskId = $_POST['taskId'];
 
-    $sql = "DELETE FROM tasks WHERE id = $taskId";
-    if ($connection->query($sql) === TRUE) {
-        header("Location: ../../resources/views/index.php");
-    } else {
-        echo "Ошибка при удалении данных: " . $connection->error;
+    try {
+        $sql = "DELETE FROM tasks WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$taskId]);
+        header("Location: ../../index.php");
+    } catch (PDOException $e) {
+        echo "Ошибка при удалении данных: " . $e->getMessage();
     }
 } else {
     echo "Ошибка при удалении данных";
 }
-
-$connection->close();
-?>
